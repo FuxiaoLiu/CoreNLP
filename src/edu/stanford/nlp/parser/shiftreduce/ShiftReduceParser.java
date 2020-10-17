@@ -507,7 +507,8 @@ public class ShiftReduceParser extends ParserGrammar implements Serializable  {
     log.info("States which only occur at the root: " + rootOnlyStates);
 
     Timing transitionTimer = new Timing();
-    List<List<Transition>> transitionLists = CreateTransitionSequence.createTransitionSequences(binarizedTrees, op.compoundUnaries, rootStates, rootOnlyStates, new ArraySet<String>(op.langpack().punctuationTags()));
+    List<List<Transition>> transitionLists = CreateTransitionSequence.createTransitionSequences(binarizedTrees, op.compoundUnaries,
+                                                                                                rootStates, rootOnlyStates, new ArraySet<String>(op.langpack().punctuationTags()));
     Index<Transition> transitionIndex = new HashIndex<>();
     for (List<Transition> transitions : transitionLists) {
       transitionIndex.addAll(transitions);
@@ -524,7 +525,7 @@ public class ShiftReduceParser extends ParserGrammar implements Serializable  {
 
     PerceptronModel newModel = new PerceptronModel(this.op, transitionIndex, knownStates, rootStates, rootOnlyStates);
 
-    System.err.println("Punctuation tags: " + newModel.punctuationTags);
+    log.info("Punctuation tags: " + newModel.punctuationTags);
 
     newModel.trainModel(serializedPath, tagger, random, binarizedTrees, transitionLists, devTreebank, nThreads);
     this.model = newModel;
